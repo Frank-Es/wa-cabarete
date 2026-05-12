@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WÁ Cabarete</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --t:#3ABFBF;--tl:#7AD8D8;--td:#1A6464;--tm:rgba(58,191,191,.09);--tb:rgba(58,191,191,.28);
+  --a:#C8903A;--al:#E8B86A;--am:rgba(200,144,58,.09);--ab:rgba(200,144,58,.28);
+  --ink:#08101E;--ink2:#0D1828;--ink3:#111F32;
+  --cr:#FDFAF4;--tx:#E8EEF8;--mu:#6B7E99;--go:#C9A84C;--ru:rgba(255,255,255,.07);
+}
+body{background:var(--ink);color:var(--tx);font-family:'Jost',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 clamp(1rem,4vw,3.5rem);transition:background .3s}
+nav.sc{background:rgba(8,16,30,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--ru)}
+.nlogo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cr);letter-spacing:-.03em;text-decoration:none}
+.nlogo em{font-style:italic;font-weight:300;color:var(--al)}
+.nright{display:flex;align-items:center;gap:6px}
+.tog{display:flex;gap:2px;border:1px solid;padding:2px;border-radius:100px}
+.tog.tg{border-color:var(--tb)}.tog.ag{border-color:var(--ab)}
+.tbtn,.abtn{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:100px;cursor:pointer;border:none;background:transparent;color:var(--mu);transition:all .2s}
+.tbtn.on{background:var(--t);color:var(--ink);font-weight:500}
+.abtn.on{background:var(--a);color:var(--ink);font-weight:500}
+.br{height:2px;background:linear-gradient(90deg,var(--td),var(--t),var(--tl),var(--al),var(--a))}
+
+/* HERO */
+.hero{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 clamp(3rem,6vw,5rem)}
+.hbg{position:absolute;inset:0}
+.hbg img{width:100%;height:100%;object-fit:cover;object-position:center 45%;opacity:.75;display:block}
+.hbg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,16,30,.35) 0%,rgba(8,16,30,.05) 30%,rgba(8,16,30,.9) 100%)}
+.hc{position:relative;z-index:2;padding:0 clamp(1.5rem,5vw,4.5rem)}
+.hey{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.38em;text-transform:uppercase;color:var(--tl);display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
+.hey::before{content:'';width:20px;height:1px;background:var(--tl)}
+.hh{font-family:'Playfair Display',serif;font-size:clamp(62px,12vw,140px);font-weight:900;color:var(--cr);line-height:.82;letter-spacing:-.035em;margin-bottom:.8rem}
+.hh em{font-style:italic;font-weight:300;color:var(--al)}
+.hdl{width:1px;height:44px;background:linear-gradient(to bottom,transparent,var(--al),transparent);margin:.9rem 0}
+.htl{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,2vw,21px);font-weight:300;font-style:italic;color:rgba(253,250,244,.55);margin-bottom:1.75rem;max-width:440px}
+.hbtns{display:flex;gap:10px;flex-wrap:wrap}
+.bi,.bs{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;padding:13px 24px;cursor:pointer;transition:all .2s}
+.bi{background:var(--t);color:var(--ink);border:none}.bi:hover{background:var(--tl)}
+.bs{background:transparent;color:var(--al);border:1px solid var(--ab)}.bs:hover{background:rgba(232,184,106,.08)}
+
+/* STATS BAR */
+.sbar{display:grid;grid-template-columns:repeat(6,1fr);background:rgba(8,16,30,.97);border-bottom:1px solid var(--ru)}
+.sbi{padding:1rem .5rem;border-right:1px solid var(--ru);text-align:center}.sbi:last-child{border-right:none}
+.sbn{font-family:'Jost',sans-serif;font-size:1.1rem;font-weight:700}
+.tc{color:var(--t)}.ac{color:var(--al)}.gc{color:var(--go)}
+.sbl{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-top:.1rem}
+
+/* SECTIONS */
+.sec{padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,4.5rem);border-bottom:1px solid var(--ru)}
+.ey{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--t);display:flex;align-items:center;gap:.6rem;margin-bottom:.9rem}
+.ey::before{content:'';width:13px;height:1px;background:var(--t)}.ey.am{color:var(--a)}.ey.am::before{background:var(--a)}
+.st2{font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,52px);font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--cr);margin-bottom:.85rem}
+.st2 em{font-style:italic;font-weight:300;color:var(--tl)}
+.sd{font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.8;color:var(--mu);max-width:560px;margin-bottom:1.5rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ru)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ru)}
+
+/* AUDIENCE */
+.inv,.gst{display:block}
+body.gm .inv{display:none}
+
+/* PHOTO GRID */
+.pgrid{display:grid;grid-template-columns:2fr 1fr;gap:2px;margin:1.75rem 0}
+.ps{position:relative;overflow:hidden}
+.ps img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}.ps:hover img{transform:scale(1.04)}
+.psl{position:absolute;bottom:.6rem;left:.85rem;font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(253,250,244,.4)}
+.ps.lg{min-height:380px}.ps.sm{min-height:188px}
+.psc{display:flex;flex-direction:column;gap:2px}
+.pg3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2px}.pg3 .ps{min-height:185px}
+
+/* FACT ROWS */
+.frows{border:1px solid var(--ru)}.fr{display:flex;justify-content:space-between;align-items:center;padding:.52rem .95rem;border-bottom:1px solid var(--ru);font-size:11.5px}.fr:last-child{border-bottom:none}
+.fk{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mu)}
+.fv{color:var(--cr);font-weight:500}.fv.t{color:var(--t)}.fv.al{color:var(--al)}.fv.go{color:var(--go)}
+
+/* TAM SAM SOM */
+.tss{display:flex;justify-content:center;align-items:flex-end;gap:2.5rem;padding:2.5rem 0 1rem;flex-wrap:wrap}
+.mc{text-align:center}
+.mcirc{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 1.1rem}
+.mcirc.tam{width:200px;height:200px;background:rgba(58,191,191,.06);border:1px solid rgba(58,191,191,.18)}
+.mcirc.sam{width:145px;height:145px;background:rgba(58,191,191,.12);border:1px solid rgba(58,191,191,.32)}
+.mcirc.som{width:88px;height:88px;background:rgba(58,191,191,.22);border:1px solid rgba(58,191,191,.55)}
+.mtag{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--t);margin-bottom:.15rem}
+.mamt{font-family:'Jost',sans-serif;font-weight:700;color:var(--cr);line-height:1}
+.mcirc.tam .mamt{font-size:1.5rem}.mcirc.sam .mamt{font-size:1.1rem}.mcirc.som .mamt{font-size:.85rem}
+.mnm{font-family:'Playfair Display',serif;font-size:.85rem;font-weight:700;color:var(--cr);margin-bottom:.2rem}
+.mdsc{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--mu);max-width:140px;margin:0 auto;line-height:1.4}
+.msrc{font-family:'DM Mono',monospace;font-size:6.5px;color:rgba(255,255,255,.18);margin-top:.3rem;letter-spacing:.04em}
+.mcard{background:var(--ink2);padding:1.4rem}
+.mcard-t{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--t);margin-bottom:.65rem}
+.mcard-d{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--mu);line-height:1.72}
+
+/* INVEST PATHS */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.5rem}
+.pc{padding:1.8rem;border:1px solid var(--ru);background:var(--ink2);position:relative;overflow:hidden}
+.pc.pt{border-color:var(--tb);background:linear-gradient(145deg,rgba(26,100,100,.2),var(--ink2) 60%)}
+.pc.pa{border-color:var(--ab);background:linear-gradient(145deg,rgba(154,110,34,.15),var(--ink2) 60%)}
+.pill{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;padding:4px 10px;display:inline-block;margin-bottom:1.1rem;border:1px solid}
+.pill.t{background:var(--tm);color:var(--t);border-color:var(--tb)}.pill.a{background:var(--am);color:var(--al);border-color:var(--ab)}
+.ptit{font-family:'Playfair Display',serif;font-size:clamp(20px,2.8vw,32px);font-weight:700;color:var(--cr);margin-bottom:.3rem;line-height:1.1}
+.ptit em{font-style:italic;font-weight:300}
+.pc.pt .ptit em{color:var(--tl)}.pc.pa .ptit em{color:var(--al)}
+.pamt{font-family:'Jost',sans-serif;font-size:clamp(36px,5.5vw,64px);font-weight:700;margin:1rem 0 .15rem;line-height:.9}
+.pc.pt .pamt{color:var(--t)}.pc.pa .pamt{color:var(--al)}
+.pasub{font-family:'Cormorant Garamond',serif;font-size:13.5px;font-style:italic;color:var(--mu);margin-bottom:1.2rem}
+.strike{text-decoration:line-through;font-size:1.35rem;font-weight:700;color:var(--mu);opacity:.4;margin-left:.6rem;line-height:1}
+.pdsc{font-family:'Cormorant Garamond',serif;font-size:14px;line-height:1.72;color:var(--mu);margin:1.2rem 0}
+.pcta{width:100%;padding:12px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;font-weight:500}
+.pc.pt .pcta{background:var(--t);color:var(--ink)}.pc.pt .pcta:hover{background:var(--tl)}
+.pc.pa .pcta{background:var(--a);color:var(--ink)}.pc.pa .pcta:hover{background:var(--al)}
+.eb{position:absolute;top:1.1rem;right:1.1rem;background:var(--a);color:var(--ink);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;font-weight:700}
+
+/* CALCULATOR */
+.calc{background:rgba(58,191,191,.06);border:1px solid rgba(58,191,191,.2);padding:1.1rem;margin-bottom:1.2rem}
+.calct{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--t);margin-bottom:.85rem}
+.calc-range{width:100%;accent-color:var(--t);margin:.4rem 0 .85rem;cursor:pointer}
+.crows{border:1px solid var(--ru)}
+.crow{display:flex;justify-content:space-between;align-items:center;padding:.48rem .85rem;border-bottom:1px solid var(--ru);font-size:11.5px}.crow:last-child{border-bottom:none}
+.ck{color:var(--mu)}.cv{color:var(--cr);font-weight:500}.cv.big{color:var(--t);font-family:'Jost',sans-serif;font-size:1.05rem;font-weight:700}
+
+/* SECURITY */
+.sstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ru);margin:2rem 0}
+.ssc{background:var(--ink2);padding:1.4rem;text-align:center}
+.ssc-i{font-size:1.25rem;margin-bottom:.55rem;display:block}
+.ssc-t{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--cr);margin-bottom:.3rem}
+.ssc-d{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--mu);line-height:1.6}
+
+/* FINANCIAL TABLE */
+.ftbl{width:100%;border-collapse:collapse;margin:1.1rem 0;font-size:12px}
+.ftbl th{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);padding:8px 11px;text-align:left;background:var(--ink3);border-bottom:1px solid var(--ru)}
+.ftbl th.tc{color:var(--t)}
+.ftbl td{padding:7px 11px;border-bottom:1px solid var(--ru);color:var(--tx)}
+.ftbl tr:last-child td{border-bottom:none}
+.ftbl .ht td{background:rgba(58,191,191,.07)!important;color:var(--t);font-weight:600}
+.lb{color:var(--cr);font-weight:500}.tct{color:var(--t);font-weight:500}.gct{color:var(--go);font-weight:500}
+
+/* KPI BOX */
+.kpibox{background:var(--tm);border:1px solid var(--tb);padding:1.75rem}
+.kpitit{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--t);margin-bottom:1.1rem}
+.kpirow{text-align:center;padding:1.2rem 0;border-bottom:1px solid rgba(58,191,191,.13)}.kpirow:last-child{border-bottom:none}
+.kpiv{font-family:'Jost',sans-serif;font-weight:700;line-height:.88}
+.kpiv.big{font-size:2.6rem}.kpiv.md{font-size:1.9rem}.kpiv.sm{font-size:1.35rem}
+.kpiv.t{color:var(--t)}.kpiv.al{color:var(--al)}.kpiv.go{color:var(--go)}
+.kpil{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-top:.35rem}
+
+/* APPRECIATION */
+.appr{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--ru);margin:1.1rem 0}
+.apst{background:var(--ink2);padding:1.1rem .7rem;text-align:center}
+.apst.now{background:var(--tm);border:1px solid var(--tb)}
+.appct{font-family:'Jost',sans-serif;font-size:1.1rem;font-weight:700;color:var(--t);margin-bottom:.2rem}
+.apst.now .appct{color:var(--al)}
+.appl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);line-height:1.4}
+.appnow{font-family:'DM Mono',monospace;font-size:7px;color:var(--go);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem}
+
+/* VILLA CARDS */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.5rem}
+.vc{background:var(--ink2);border:1px solid var(--ru);overflow:hidden;transition:border-color .25s}.vc:hover{border-color:var(--tb)}
+.vi{height:175px;position:relative;overflow:hidden}
+.vi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}.vc:hover .vi img{transform:scale(1.05)}
+.vib{position:absolute;top:.6rem;left:.6rem;font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.13em;text-transform:uppercase;background:rgba(8,16,30,.78);color:var(--t);padding:3px 9px;backdrop-filter:blur(8px)}
+.vib.ro{color:var(--al);background:rgba(8,16,30,.78)}
+.vbody{padding:1.1rem}
+.vtype{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--t);margin-bottom:.3rem}
+.vname{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--cr);margin-bottom:.12rem;line-height:1.1}
+.vname em{font-style:italic;font-weight:300;color:var(--tl)}
+.vm2{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--mu);margin-bottom:.75rem}
+.vsps{border:1px solid var(--ru);margin-bottom:.8rem}
+.vsp{display:flex;justify-content:space-between;padding:5px 9px;border-bottom:1px solid var(--ru);font-size:11px}.vsp:last-child{border-bottom:none}
+.vk{color:var(--mu)}.vv{color:var(--cr);font-weight:500}
+.vrate{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--tm);border:1px solid rgba(58,191,191,.2);margin-bottom:.75rem}
+.vrl{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--t)}
+.vrv{font-family:'Jost',sans-serif;font-size:1.1rem;font-weight:700;color:var(--t)}
+.vbtn{width:100%;padding:9px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;background:transparent;color:var(--t);border:1px solid rgba(58,191,191,.3);cursor:pointer;transition:all .2s}.vbtn:hover{background:var(--tm)}
+
+/* BOOKING SIMULATION */
+.bsim{background:var(--ink2);border:1px solid rgba(58,191,191,.2);padding:2rem;margin-top:2rem}
+.bsim-h{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--t);margin-bottom:1.1rem}
+.brow{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.75rem;align-items:end;margin-bottom:.9rem;flex-wrap:wrap}
+.bf{display:flex;flex-direction:column;gap:.25rem}
+.bf label{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--mu)}
+.bf input,.bf select{background:var(--ink3);border:1px solid var(--ru);color:var(--tx);font-family:'Jost',sans-serif;font-size:13px;padding:.55rem .8rem;outline:none;transition:border-color .2s;width:100%}
+.bf input:focus,.bf select:focus{border-color:var(--tb)}
+.bf select option{background:var(--ink3)}
+.bsearch{padding:11px 22px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;background:var(--t);color:var(--ink);border:none;cursor:pointer;white-space:nowrap;transition:background .2s}.bsearch:hover{background:var(--tl)}
+.bres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.1rem}
+.brc{background:var(--ink3);border:1px solid var(--ru);padding:1rem}
+.brc-t{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--cr);margin-bottom:.25rem}
+.brc-s{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--t);margin-bottom:.55rem}
+.brc-p{font-family:'Jost',sans-serif;font-size:1.15rem;font-weight:700;color:var(--t)}.brc-pn{font-size:.8rem;font-weight:300;color:var(--mu)}
+.brc-btn{width:100%;padding:8px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:var(--t);color:var(--ink);border:none;cursor:pointer;margin-top:.75rem;transition:background .2s}.brc-btn:hover{background:var(--tl)}
+.bnotice{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.15);margin-top:1rem;text-align:center}
+
+/* INFO BOX */
+.ib{padding:.85rem 1rem;display:flex;gap:.65rem;align-items:flex-start;font-family:'Cormorant Garamond',serif;font-size:13.5px;border-left:2px solid var(--t);background:var(--tm);color:var(--tx);margin:1.1rem 0}
+.ib.am{border-left-color:var(--a);background:var(--am)}
+
+/* FERIA BANNER */
+.fban{background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(30,79,106,.1));border:1px solid rgba(201,168,76,.25);border-left:3px solid var(--go);padding:1.2rem 1.6rem;display:flex;gap:1.75rem;align-items:flex-start;flex-wrap:wrap;margin-top:1.75rem}
+.fban-b{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--go);background:rgba(201,168,76,.1);padding:.25rem .7rem;display:inline-block;margin-bottom:.45rem}
+.fban-t{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--cr);margin-bottom:.3rem}
+.fban-d{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--mu);line-height:1.68}
+.fban-m{display:flex;flex-direction:column;gap:.4rem;min-width:170px}
+.fban-r{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--mu);display:flex;gap:.45rem}
+.fban-r strong{color:rgba(255,255,255,.65);font-weight:500}
+
+/* CONTACT */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin-top:1.75rem}
+.cform{display:flex;flex-direction:column;gap:.65rem}
+.cf{display:flex;flex-direction:column;gap:.22rem}
+.cf label{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+.cf input,.cf select,.cf textarea{background:var(--ink2);border:1px solid var(--ru);color:var(--tx);font-family:'Jost',sans-serif;font-size:13px;padding:.58rem .82rem;outline:none;transition:border-color .2s;width:100%}
+.cf input:focus,.cf select:focus,.cf textarea:focus{border-color:var(--tb)}
+.cf textarea{resize:vertical;min-height:72px}.cf select option{background:var(--ink2)}
+.csend{width:100%;padding:13px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:var(--t);color:var(--ink);border:none;cursor:pointer;transition:all .2s;font-weight:600;margin-top:.3rem}.csend:hover{background:var(--tl)}
+.cinfo{display:flex;flex-direction:column;gap:1.25rem}
+.cib{border-left:2px solid rgba(58,191,191,.3);padding-left:1rem}
+.cilbl{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--t);margin-bottom:.2rem}
+.cival{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--cr)}
+.cisub{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--mu);margin-top:.12rem;letter-spacing:.04em}
+
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:center;justify-content:center;padding:1.5rem}
+.mbg.show{display:flex}
+.modal{background:var(--ink2);border:1px solid var(--tb);padding:1.75rem;max-width:420px;width:100%;position:relative}
+.mc-close{position:absolute;top:.7rem;right:.7rem;background:none;border:none;color:var(--mu);font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;padding:4px 10px;cursor:pointer;letter-spacing:.12em}.mc-close:hover{color:var(--cr)}
+.mh{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--cr);margin-bottom:.2rem}
+.msub{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--mu);margin-bottom:1.25rem}
+
+/* CTA CLOSING */
+.ctaf{padding:clamp(4rem,9vw,7rem) clamp(1.5rem,5vw,4.5rem);text-align:center;position:relative;overflow:hidden;background:var(--td)}
+.ctaf::before{content:'';position:absolute;bottom:-140px;left:-140px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(232,184,106,.1),transparent 60%)}
+.ctaf::after{content:'';position:absolute;top:-100px;right:-100px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,rgba(122,216,216,.1),transparent 60%)}
+.ctaf-wbg{font-family:'Playfair Display',serif;font-size:clamp(80px,18vw,200px);font-weight:900;color:rgba(253,250,244,.04);line-height:.82;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);letter-spacing:-.04em;pointer-events:none;white-space:nowrap}
+.ctaf-c{position:relative;z-index:2}
+.ctaf-h{font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,70px);font-weight:900;color:var(--cr);letter-spacing:-.03em;margin-bottom:.6rem;line-height:.9}
+.ctaf-h em{font-style:italic;font-weight:300;color:var(--al)}
+.ctaf-d{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,2vw,20px);font-style:italic;color:rgba(253,250,244,.5);max-width:500px;margin:0 auto 2rem;line-height:1.6}
+footer{padding:1.4rem clamp(1.5rem,5vw,4.5rem);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:var(--ink)}
+.flogo{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:900;color:var(--cr)}.flogo em{font-style:italic;font-weight:300;color:var(--al)}
+.fcopy{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--mu);text-align:right;line-height:1.8}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}.rv.in{opacity:1;transform:none}
+
+@media(max-width:860px){
+  .g2,.paths,.cgrid,.pgrid,.sstrip,.brow{grid-template-columns:1fr}
+  .sbar,.g3,.g4,.appr,.vgrid,.pg3,.bres{grid-template-columns:1fr 1fr}
+  .ps.lg{min-height:240px}
+}
+@media(max-width:520px){
+  .sbar,.g3,.g4,.bres,.vgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body id="bd">
+
+<!-- MODAL -->
+<div class="mbg" id="modal">
+  <div class="modal">
+    <button class="mc-close" onclick="closeModal()">✕ Cerrar</button>
+    <div id="modal-content"></div>
+    <div class="cform" style="margin-top:1.1rem">
+      <div class="cf"><label id="ml1">Nombre completo</label><input type="text" placeholder="Ana García"></div>
+      <div class="cf"><label id="ml2">Email</label><input type="email" placeholder="ana@example.com"></div>
+      <div class="cf"><label id="ml3">Teléfono / WhatsApp</label><input type="tel" placeholder="+34 600 000 000"></div>
+      <div class="cf" id="ticket-field"><label id="ml4">Ticket de inversión</label>
+        <select><option>$100.000 – $250.000</option><option>$250.000 – $500.000</option><option>$500.000 – $1.000.000</option><option>$1.000.000 – $2.525.000</option><option>Proyecto completo ($4.5M – $5M)</option></select>
+      </div>
+      <button class="csend" onclick="submitModal()">Enviar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nlogo">W<em>Á</em></a>
+  <div class="nright">
+    <div class="tog ag">
+      <button class="abtn on" id="btn-inv" onclick="setAud(0)" data-t="Inversor|Investor">Inversor</button>
+      <button class="abtn" id="btn-gst" onclick="setAud(1)" data-t="Huésped|Guest">Huésped</button>
+    </div>
+    <div class="tog tg">
+      <button class="tbtn on" onclick="setLang('es')">ES</button>
+      <button class="tbtn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hbg">
+    <img src="https://res.cloudinary.com/dbc8nfyer/image/upload/fl_relative,c_crop,g_north,h_0.82,e_sharpen:200,e_brightness:20,e_saturation:10/v1777393053/gemini-2.5-flash-image_quiero_una_vista_desde_la_piscina_en_primera_persona_en_la_golden_hour_como_port-0_sw99qb.jpg" alt="WÁ Cabarete">
+  </div>
+  <div class="hc">
+    <div class="hey"><span data-t="Costa del Ámbar · República Dominicana|Amber Coast · Dominican Republic"></span></div>
+    <div class="hh">W<em>Á</em><br>Cabarete</div>
+    <div class="hdl"></div>
+    <div class="htl" data-t="15 villas boutique. Arquitectura tropical, redefinida.|15 boutique villas. Tropical architecture, redefined."></div>
+    <div class="hbtns">
+      <button class="bi" onclick="setAud(0);scrollTo('#invest')" data-t="Invertir en WÁ|Invest in WÁ"></button>
+      <button class="bs" onclick="setAud(1);scrollTo('#villas')" data-t="Reservar una villa|Book a villa"></button>
+    </div>
+  </div>
+</div>
+<div class="br"></div>
+
+<!-- STATS -->
+<div class="sbar">
+  <div class="sbi"><div class="sbn tc">15</div><div class="sbl" data-t="Villas boutique|Boutique villas"></div></div>
+  <div class="sbi"><div class="sbn gc">$5.0M</div><div class="sbl">GDV</div></div>
+  <div class="sbi"><div class="sbn tc">17.4%</div><div class="sbl" data-t="ROI neto / año|Net ROI / year"></div></div>
+  <div class="sbi"><div class="sbn ac">$439K</div><div class="sbl" data-t="Beneficio neto / año|Net profit / year"></div></div>
+  <div class="sbi"><div class="sbn tc">18%</div><div class="sbl" data-t="TIR bullet loan|Bullet loan IRR"></div></div>
+  <div class="sbi"><div class="sbn ac">$4.5M</div><div class="sbl" data-t="Early Bird · Adquisición|Early Bird · Acquisition"></div></div>
+</div>
+<div class="br"></div>
+
+<!-- PROYECTO -->
+<section class="sec rv" id="project">
+  <div class="g2">
+    <div>
+      <div class="ey"><span data-t="01 — El proyecto|01 — The project"></span></div>
+      <h2 class="st2">WÁ Cabarete:<br><em data-t="15 villas en la Costa del Ámbar|15 villas on the Amber Coast"></em></h2>
+      <p class="sd" data-t="Complejo vacacional de 15 villas boutique sobre 3.220 m² en Sosúa, Costa Norte de la República Dominicana. Sistema EPS Emmedue M2 — el mayor ROI del análisis con el mejor aislamiento del Caribe. Incluye recepción, snack bar exclusivo y piscina comunitaria.|A vacation complex of 15 boutique villas on 3,220 m² in Sosúa, North Coast of the Dominican Republic. EPS Emmedue M2 system — the highest ROI in the analysis with the best insulation in the Caribbean. Includes a reception, exclusive snack bar, and community pool."></p>
+      <div class="frows">
+        <div class="fr"><span class="fk" data-t="Ubicación|Location"></span><span class="fv" data-t="Sosúa · Costa Norte · RD|Sosúa · North Coast · DR"></span></div>
+        <div class="fr"><span class="fk" data-t="Solar total|Total land area"></span><span class="fv">3.220 m²</span></div>
+        <div class="fr"><span class="fk" data-t="Tipologías|Villa types"></span><span class="fv" data-t="4 tipos · 80–172 m² + Rooftop|4 types · 80–172 m² + Rooftop"></span></div>
+        <div class="fr"><span class="fk" data-t="Sistema constructivo|Construction system"></span><span class="fv">EPS Emmedue M2</span></div>
+        <div class="fr"><span class="fk" data-t="Apertura estimada|Estimated opening"></span><span class="fv" data-t="7–9 meses tras inicio de obra|7–9 months after construction start"></span></div>
+        <div class="fr"><span class="fk" data-t="Gestión|Management"></span><span class="fv">Caribbean Collection Real Estate</span></div>
+        <div class="fr"><span class="fk" data-t="Promotor|Developer"></span><span class="fv">Corporación AKLK, S.R.L.</span></div>
+      </div>
+      <div class="fban">
+        <div style="flex:1;min-width:230px">
+          <div class="fban-b" data-t="Presentación Oficial|Official Presentation"></div>
+          <div class="fban-t">Feria Banreservas · Madrid 2026</div>
+          <div class="fban-d" data-t="WÁ Cabarete estará presente en la Feria Inmobiliaria Banreservas. Acceso a financiamiento hipotecario para compradores internacionales.|WÁ Cabarete will be featured at the Banreservas Real Estate Fair. International buyers get access to mortgage financing."></div>
+        </div>
+        <div class="fban-m">
+          <div class="fban-r"><strong data-t="Fechas:|Dates:"></strong><span>22–24 Mayo 2026</span></div>
+          <div class="fban-r"><strong data-t="Sede:|Venue:"></strong><span>Hotel Meliá Castilla, Madrid</span></div>
+          <div class="fban-r"><strong>Banco:</strong><span>Banreservas</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="position:relative;overflow:hidden;border:1px solid var(--ru)">
+        <img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777457013/Imagen_Cenital_Costa_Azul_p8owug.png" style="width:100%;display:block" alt="Master Plan">
+        <div class="psl" data-t="Vista aérea · Master Plan WÁ Cabarete|Aerial view · WÁ Cabarete Master Plan"></div>
+      </div>
+    </div>
+  </div>
+  <div class="pgrid">
+    <div class="ps lg"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392931/opcion_A_r1c5zm.png" alt="Exterior"><div class="psl" data-t="Fachada exterior · Estilo Mediterráneo Boho|Exterior · Mediterranean Boho style"></div></div>
+    <div class="psc">
+      <div class="ps sm"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777457639/WhatsApp_Image_2026-04-29_at_11.35.57_ejesgp.jpg" alt="Interior"><div class="psl" data-t="Interior living|Living room"></div></div>
+      <div class="ps sm"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392807/imagen_5_euy94q.jpg" alt="Boho"><div class="psl" data-t="Interior · Boho Chic|Interior · Boho Chic"></div></div>
+    </div>
+  </div>
+  <div class="pg3">
+    <div class="ps"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392679/ibiza_qcweav.png" alt="Med"><div class="psl" data-t="Estilo Mediterráneo|Mediterranean style"></div></div>
+    <div class="ps"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392679/Boho_ry69bl.png" alt="Boho"><div class="psl" data-t="Boho Chic Contemporáneo|Contemporary Boho Chic"></div></div>
+    <div class="ps"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392679/Tropical_bdqyp7.png" alt="Tropical"><div class="psl" data-t="Modernismo Tropical|Tropical Modernism"></div></div>
+  </div>
+</section>
+
+<!-- MERCADO (inversor) -->
+<section class="sec rv inv" id="market">
+  <div class="ey am"><span data-t="02 — Oportunidad de mercado|02 — Market opportunity"></span></div>
+  <h2 class="st2">TAM · SAM · SOM:<br><em data-t="una oportunidad real|a real opportunity"></em></h2>
+  <div class="g2" style="margin-bottom:0">
+    <p class="sd" data-t="El mercado de alquiler vacacional en el Caribe e inmobiliario latinoamericano está en expansión sostenida. República Dominicana cerró 2024 con $10.4B en ingresos turísticos y lidera la captación de inversión extranjera en la región. El corredor Sosúa-Cabarete registra revalorización de suelo del 7–12% anual.|The vacation rental and Latin American real estate markets are in sustained expansion. The Dominican Republic closed 2024 with $10.4B in tourism revenue, leading foreign investment attraction in the region. The Sosúa-Cabarete corridor shows 7–12% annual land appreciation."></p>
+    <div class="frows">
+      <div class="fr"><span class="fk" data-t="Turismo RD 2024|DR Tourism 2024"></span><span class="fv go">$10.4B</span></div>
+      <div class="fr"><span class="fk" data-t="IED turismo RD 2024|FDI tourism DR 2024"></span><span class="fv t">$1.2B</span></div>
+      <div class="fr"><span class="fk" data-t="CAGR vacacional Caribe|Caribbean vacation CAGR"></span><span class="fv t">+8.4%</span></div>
+      <div class="fr"><span class="fk" data-t="Turistas llegados 2024|Tourists arrived 2024"></span><span class="fv">10.97M</span></div>
+      <div class="fr"><span class="fk" data-t="Ocupación media Sosúa-Cabarete|Avg occupancy Sosúa-Cabarete"></span><span class="fv t">65 – 72%</span></div>
+      <div class="fr"><span class="fk" data-t="Apreciación suelo anual|Annual land appreciation"></span><span class="fv t">+7 – 12%</span></div>
+    </div>
+  </div>
+  <!-- TAM SAM SOM VISUAL -->
+  <div class="tss">
+    <div class="mc">
+      <div class="mcirc tam"><div class="mtag">TAM</div><div class="mamt">$87B</div></div>
+      <div class="mnm" data-t="Total Addressable Market|Total Addressable Market"></div>
+      <div class="mdsc" data-t="Mercado global de alquiler vacacional|Global vacation rental market"></div>
+      <div class="msrc">Grand View Research, 2024</div>
+    </div>
+    <div class="mc">
+      <div class="mcirc sam"><div class="mtag">SAM</div><div class="mamt">$9.2B</div></div>
+      <div class="mnm" data-t="Serviceable Market|Serviceable Market"></div>
+      <div class="mdsc" data-t="Vacacional premium Caribe + inmobiliario LATAM|Premium Caribbean + LATAM real estate"></div>
+      <div class="msrc">CTO / ECLAC, 2024</div>
+    </div>
+    <div class="mc">
+      <div class="mcirc som"><div class="mtag">SOM</div><div class="mamt">$185M</div></div>
+      <div class="mnm" data-t="Mercado Objetivo|Obtainable Market"></div>
+      <div class="mdsc" data-t="Costa Norte RD · horizonte 5 años|North Coast DR · 5-year horizon"></div>
+      <div class="msrc">CCRE / Min. Turismo RD, est. 2026</div>
+    </div>
+  </div>
+  <div class="g3" style="margin-top:1.5rem">
+    <div class="mcard"><div class="mcard-t" data-t="Macro & Turismo|Macro & Tourism"></div><div class="mcard-d" data-t="RD superó los 10.97M de turistas en 2024 (+6.2% vs 2023). La Costa Norte concentra el 18% del turismo premium. El aeropuerto Gregorio Luperón creció un 14% en tráfico internacional. Fuente: Ministerio de Turismo RD, 2024.|DR surpassed 10.97M tourists in 2024 (+6.2% vs 2023). The North Coast concentrates 18% of premium tourism. Gregorio Luperón airport grew 14% in international traffic. Source: DR Ministry of Tourism, 2024."></div></div>
+    <div class="mcard"><div class="mcard-t" data-t="Demanda internacional|International demand"></div><div class="mcard-d" data-t="El segmento nómada digital europeo y norteamericano crece un 22% anual en Cabarete. El 65% busca alquiler de calidad con estética premium. Cabarete es el destino surfer número 1 del Caribe. Fuente: Airbnb Insights, 2025.|The European and North American digital nomad segment grows 22% annually in Cabarete. 65% seek quality rental with premium aesthetics. Cabarete is the #1 surf destination in the Caribbean. Source: Airbnb Insights, 2025."></div></div>
+    <div class="mcard"><div class="mcard-t" data-t="Plusvalía proyectada|Projected appreciation"></div><div class="mcard-d" data-t="GDV proyectado de WÁ Cabarete en 2031: $8.2–9.1M (+64% sobre GDV 2026). Revalorización anual del activo construido estimada en +6–8%. El proyecto está en fase de permisología, el mejor momento de entrada. Fuente: CCRE / Banco Central RD.|WÁ Cabarete's projected GDV in 2031: $8.2–9.1M (+64% over 2026 GDV). Annual appreciation of the built asset estimated at +6–8%. The project is in the permitting phase — the best entry point. Source: CCRE / Central Bank DR."></div></div>
+  </div>
+  <!-- APPRECIATION CURVE -->
+  <div style="margin-top:2rem">
+    <div style="font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--t);margin-bottom:.85rem" data-t="Curva de plusvalía del activo · Fase actual → Entrega|Asset appreciation curve · Current phase → Delivery"></div>
+    <div class="appr">
+      <div class="apst"><div class="appct">+8%</div><div class="appl" data-t="Suelo Bruto|Raw Land"></div></div>
+      <div class="apst now"><div class="appct">+18%</div><div class="appl" data-t="Permisología|Permitting"></div><div class="appnow" data-t="← Ahora|← Now"></div></div>
+      <div class="apst"><div class="appct">+32%</div><div class="appl" data-t="Mov. de Tierra|Groundwork"></div></div>
+      <div class="apst"><div class="appct">+48%</div><div class="appl" data-t="Obra Gris|Structure"></div></div>
+      <div class="apst"><div class="appct">+65%</div><div class="appl" data-t="Entrega Final|Final Delivery"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INVERTIR (inversor) -->
+<section class="sec rv inv" id="invest">
+  <div class="ey"><span data-t="03 — Invertir en WÁ Cabarete|03 — Invest in WÁ Cabarete"></span></div>
+  <h2 class="st2" data-t="Elige tu forma<br>de <em>invertir</em>|Choose your<br><em>investment</em> path"></h2>
+  <p class="sd" data-t="Dos estructuras diseñadas para perfiles distintos. Ambas con rendimientos superiores al mercado y respaldadas por garantías reales sobre el activo.|Two structures designed for different profiles. Both with above-market returns, backed by real asset guarantees."></p>
+  <div class="paths">
+    <!-- BULLET LOAN -->
+    <div class="pc pt">
+      <div class="pill t" data-t="Préstamo Bullet · Inversor Constructor|Bullet Loan · Construction Investor"></div>
+      <div class="ptit" data-t="Financia la <em>construcción</em>|Finance the <em>construction</em>"></div>
+      <div class="pamt">18%</div>
+      <div class="pasub" data-t="TIR anual · Capital + intereses pagaderos en el exit|Annual IRR · Principal + interest payable at exit"></div>
+      <div class="frows">
+        <div class="fr"><span class="fk" data-t="Capital total de la ronda|Total round capital"></span><span class="fv t">$2.525.000</span></div>
+        <div class="fr"><span class="fk" data-t="Ticket mínimo|Minimum ticket"></span><span class="fv">$100.000</span></div>
+        <div class="fr"><span class="fk" data-t="Plazo máximo|Maximum term"></span><span class="fv">24 <span style="font-size:.85em;font-weight:300;color:var(--mu)" data-t="meses|months"></span></span></div>
+        <div class="fr"><span class="fk" data-t="Estructura de pago|Payment structure"></span><span class="fv t" data-t="Bullet · 0 pagos intermedios|Bullet · 0 interim payments"></span></div>
+        <div class="fr"><span class="fk" data-t="Garantía real|Real collateral"></span><span class="fv t" data-t="1ª Hipoteca sobre terreno 3.220 m²|1st Mortgage on 3,220 m² land"></span></div>
+        <div class="fr"><span class="fk" data-t="Trigger del exit|Exit trigger"></span><span class="fv go" data-t="Lo que ocurra primero: venta / refinanc. / ops.|First of: sale / refinancing / operations"></span></div>
+      </div>
+      <div class="calc">
+        <div class="calct" data-t="Calculadora de retorno · Ajusta tu ticket|Return calculator · Adjust your ticket"></div>
+        <input type="range" class="calc-range" id="slider" min="100" max="2525" value="250" step="25" oninput="calcR()">
+        <div class="crows">
+          <div class="crow"><span class="ck" data-t="Capital invertido|Capital invested"></span><span class="cv" id="c-cap">$250.000</span></div>
+          <div class="crow"><span class="ck" data-t="Intereses a 18% TIR × 24 meses|Interest at 18% IRR × 24 months"></span><span class="cv t" id="c-int">+$90.000</span></div>
+          <div class="crow"><span class="ck" data-t="Total recibido en el exit|Total received at exit"></span><span class="cv big" id="c-tot">$340.000</span></div>
+          <div class="crow"><span class="ck" data-t="% de la ronda|% of the round"></span><span class="cv go" id="c-pct">9.9%</span></div>
+        </div>
+      </div>
+      <p class="pdsc" data-t="Tu capital financia la construcción de WÁ Cabarete, garantizado por primera hipoteca sobre el terreno de 3.220 m². Capital e intereses se pagan íntegramente en el exit: lo que ocurra primero entre la venta de villas, refinanciación bancaria o ingresos operativos acumulados.|Your capital finances WÁ Cabarete's construction, secured by a first mortgage on the 3,220 m² land. Principal and interest are paid in full at exit — whichever comes first: villa sales, bank refinancing, or accumulated operating income."></p>
+      <button class="pcta" onclick="openModal('bullet')" data-t="Solicitar información · Bullet Loan|Request information · Bullet Loan"></button>
+    </div>
+    <!-- FULL ACQUISITION -->
+    <div class="pc pa">
+      <div class="eb" data-t="Early Bird hasta 31 Dic 2026|Early Bird until Dec 31 2026"></div>
+      <div class="pill a" data-t="Adquisición completa · Propietario total|Full acquisition · 100% owner"></div>
+      <div class="ptit" data-t="Adquiere el <em>complejo completo</em>|Acquire the <em>complete complex</em>"></div>
+      <div style="display:flex;align-items:flex-end;gap:.65rem;margin:1rem 0 .15rem">
+        <div class="pamt">$4.5M</div>
+        <div class="strike">$5.0M</div>
+      </div>
+      <div class="pasub" data-t="Early Bird · Precio regular $5.0M · Ahorro $500K|Early Bird · Regular price $5.0M · Save $500K"></div>
+      <div class="frows">
+        <div class="fr"><span class="fk" data-t="Precio Early Bird (hasta 31/12/26)|Early Bird price (until 31/12/26)"></span><span class="fv al">$4.500.000</span></div>
+        <div class="fr"><span class="fk" data-t="Precio regular|Regular price"></span><span class="fv">$5.000.000</span></div>
+        <div class="fr"><span class="fk" data-t="GDV del activo construido|Built asset GDV"></span><span class="fv go">$5.000.000</span></div>
+        <div class="fr"><span class="fk" data-t="Beneficio neto operativo / año|Net operating profit / year"></span><span class="fv al">$439.277</span></div>
+        <div class="fr"><span class="fk" data-t="ROI operativo anual|Annual operating ROI"></span><span class="fv al">17.4%</span></div>
+        <div class="fr"><span class="fk" data-t="Payback operativo estimado|Estimated operating payback"></span><span class="fv">5.7 <span style="font-size:.85em;font-weight:300;color:var(--mu)" data-t="años|years"></span></span></div>
+        <div class="fr"><span class="fk" data-t="Activo incluido|Asset included"></span><span class="fv" data-t="15 villas + recepción + snack bar|15 villas + reception + snack bar"></span></div>
+        <div class="fr"><span class="fk" data-t="GDV proyectado 2031|Projected GDV 2031"></span><span class="fv go">$8.2–9.1M</span></div>
+      </div>
+      <p class="pdsc" data-t="Adquieres el complejo completo ya construido, amueblado y operativo. Caribbean Collection gestiona las 15 villas con su plataforma tecnológica y motor Tolvia IA, maximizando ocupación e ingresos desde el día 1. El early bird representa un 10% de descuento sobre el GDV real del activo.|You acquire the complete complex, already built, furnished, and operational. Caribbean Collection manages the 15 villas with its tech platform and Tolvia AI engine, maximizing occupancy and income from day 1. The early bird is a 10% discount on the asset's real GDV."></p>
+      <button class="pcta" onclick="openModal('acquisition')" data-t="Solicitar información · Adquisición|Request information · Acquisition"></button>
+    </div>
+  </div>
+  <div class="sstrip">
+    <div class="ssc"><span class="ssc-i">🏛️</span><div class="ssc-t" data-t="1ª Hipoteca|1st Mortgage"></div><div class="ssc-d" data-t="Garantía real inscrita ante el Registro de Títulos sobre los 3.220 m² de terreno en Sosúa.|Real guarantee registered at the Title Registry on the 3,220 m² land in Sosúa."></div></div>
+    <div class="ssc"><span class="ssc-i">📋</span><div class="ssc-t" data-t="Contrato notarial|Notarial contract"></div><div class="ssc-d" data-t="Escritura pública dominicana, registrada en Cámara de Comercio y Banco Central de la RD.|Dominican public deed, registered at the Chamber of Commerce and Central Bank."></div></div>
+    <div class="ssc"><span class="ssc-i">📊</span><div class="ssc-t" data-t="Reporting mensual|Monthly reporting"></div><div class="ssc-d" data-t="Auditoría de obra independiente con hitos verificados. Acceso a dashboard de seguimiento en tiempo real.|Independent construction audit with verified milestones. Real-time tracking dashboard access."></div></div>
+    <div class="ssc"><span class="ssc-i">🌿</span><div class="ssc-t">CONFOTUR</div><div class="ssc-d" data-t="Calificación en trámite. Exenciones fiscales y arancelarias hasta 20 años para el inversor.|Certification in process. Tax and tariff exemptions up to 20 years for the investor."></div></div>
+  </div>
+</section>
+
+<!-- FINANCIEROS (inversor) -->
+<section class="sec rv inv" id="financials">
+  <div class="ey"><span data-t="04 — Proyecciones financieras|04 — Financial projections"></span></div>
+  <h2 class="st2" data-t="Los números<br><em>hablan por sí solos</em>|The numbers<br><em>speak for themselves</em>"></h2>
+  <div class="g2">
+    <div>
+      <table class="ftbl">
+        <thead><tr>
+          <th data-t="Tipología|Villa type"></th>
+          <th data-t="Uds.|Units"></th>
+          <th data-t="Tarifa/noche|Nightly rate"></th>
+          <th class="tc" data-t="Ingreso bruto/año|Gross income/year"></th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="lb" data-t="Tipo 1H — 80 m²|Type 1B — 80 m²"></td><td>3</td><td>$132</td><td class="tct">$93.951</td></tr>
+          <tr><td class="lb" data-t="Tipo 2H Estándar — 120 m²|Type 2B Standard — 120 m²"></td><td>5</td><td>$177</td><td class="tct">$209.967</td></tr>
+          <tr><td class="lb" data-t="Tipo 2H Premium + Rooftop|Type 2B Premium + Rooftop"></td><td>4</td><td>$215</td><td class="tct">$204.035</td></tr>
+          <tr><td class="lb" data-t="Tipo 3H Premium + Rooftop|Type 3B Premium + Rooftop"></td><td>3</td><td>$276</td><td class="tct">$196.443</td></tr>
+          <tr><td class="lb" data-t="Snack Bar (exclusivo huéspedes)|Snack Bar (guests only)"></td><td>—</td><td>—</td><td class="tct">$17.000</td></tr>
+          <tr class="ht"><td colspan="3" data-t="INGRESO BRUTO TOTAL / AÑO (65% ocup.)|TOTAL GROSS INCOME / YEAR (65% occ.)"></td><td>$721.396</td></tr>
+        </tbody>
+      </table>
+      <table class="ftbl">
+        <thead><tr><th data-t="Gasto operativo anual|Annual operating expense"></th><th class="tc" data-t="Importe|Amount"></th></tr></thead>
+        <tbody>
+          <tr><td data-t="Comisiones plataformas (15%)|Platform commissions (15%)"></td><td>−$108.209</td></tr>
+          <tr><td data-t="Property management (10%)|Property management (10%)"></td><td>−$72.140</td></tr>
+          <tr><td data-t="Limpieza y lavandería|Cleaning & laundry"></td><td>−$37.500</td></tr>
+          <tr><td data-t="Electricidad + agua + internet|Electricity + water + internet"></td><td>−$18.000</td></tr>
+          <tr><td data-t="Mantenimiento (3%)|Maintenance (3%)"></td><td>−$21.642</td></tr>
+          <tr><td data-t="Seguros|Insurance"></td><td>−$10.800</td></tr>
+          <tr><td data-t="Impuestos RD (2%)|DR taxes (2%)"></td><td>−$14.428</td></tr>
+          <tr class="ht"><td data-t="BENEFICIO NETO / AÑO|NET PROFIT / YEAR"></td><td>$439.277</td></tr>
+        </tbody>
+      </table>
+      <div class="ib am" style="font-size:12.5px" data-t="Proyecciones basadas en mercado Sosúa-Cabarete 2025–26. Exenciones CONFOTUR sujetas a calificación. No constituyen garantía de resultados.|Projections based on Sosúa-Cabarete market 2025–26. CONFOTUR exemptions subject to qualification. Not a guarantee of results."></div>
+    </div>
+    <div>
+      <div class="kpibox">
+        <div class="kpitit" data-t="KPIs financieros · WÁ Cabarete|Financial KPIs · WÁ Cabarete"></div>
+        <div class="kpirow"><div class="kpiv big t">17.4%</div><div class="kpil" data-t="ROI neto anual|Net annual ROI"></div></div>
+        <div class="kpirow"><div class="kpiv md al">$439K</div><div class="kpil" data-t="Beneficio neto / año|Net profit / year"></div></div>
+        <div class="kpirow"><div class="kpiv sm go">5.7 <span style="font-size:.7em" data-t="años|years"></span></div><div class="kpil" data-t="Payback operativo|Operating payback"></div></div>
+        <div class="kpirow"><div class="kpiv md t">18%</div><div class="kpil" data-t="TIR bullet loan · 24 meses|Bullet loan IRR · 24 months"></div></div>
+        <div class="kpirow"><div class="kpiv sm al">$5.0M</div><div class="kpil">GDV</div></div>
+        <div class="kpirow"><div class="kpiv sm go">$4.5M</div><div class="kpil" data-t="Early Bird adquisición|Early Bird acquisition"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VILLAS -->
+<section class="sec rv" id="villas">
+  <!-- Inversor view -->
+  <div class="inv">
+    <div class="ey"><span data-t="05 — Las 15 villas|05 — The 15 villas"></span></div>
+    <h2 class="st2" data-t="4 tipologías,<br><em>un solo activo</em>|4 villa types,<br><em>one single asset</em>"></h2>
+    <p class="sd" data-t="Mix diseñado para maximizar la ocupación transversal: parejas, familias, grupos y el segmento nómada digital premium. Cada villa con parcela privada, jardín y acceso a piscina comunitaria.|Mix designed to maximize cross-segment occupancy: couples, families, groups, and premium digital nomads. Each villa with private plot, garden, and community pool access."></p>
+  </div>
+  <!-- Guest view -->
+  <div class="gst" style="display:none">
+    <div class="ey am"><span data-t="Nuestras villas|Our villas"></span></div>
+    <h2 class="st2" data-t="Encuentra tu villa<br><em>perfecta</em>|Find your<br><em>perfect villa</em>"></h2>
+    <p class="sd" data-t="Desde retiros románticos hasta escapadas familiares. Cada villa incluye cocina equipada, jardín privado, terraza y acceso a la piscina comunitaria en la Costa del Ámbar.|From romantic getaways to family escapes. Every villa includes a fully equipped kitchen, private garden, terrace, and community pool access on the Amber Coast."></p>
+  </div>
+  <div class="vgrid">
+    <!-- TIPO 1H -->
+    <div class="vc">
+      <div class="vi"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392931/opcion_A_r1c5zm.png" alt="Tipo 1H"><div class="vib" data-t="3 unidades|3 units"></div></div>
+      <div class="vbody">
+        <div class="vtype" data-t="Tipo 1 Habitación · 80 m²|1 Bedroom Type · 80 m²"></div>
+        <div class="vname">WÁ <em>Amber</em></div>
+        <div class="vm2">80 m² · 12 m² terraza</div>
+        <div class="vsps">
+          <div class="vsp"><span class="vk" data-t="Hab. / Baños|Bed / Bath"></span><span class="vv">1 / 2</span></div>
+          <div class="vsp"><span class="vk" data-t="Capacidad|Capacity"></span><span class="vv">2 <span data-t="personas|guests"></span></span></div>
+          <div class="vsp inv"><span class="vk" data-t="Ingreso bruto/año|Gross income/year"></span><span class="vv t">$93.951</span></div>
+          <div class="vsp inv"><span class="vk" data-t="Precio de venta|Sale price"></span><span class="vv t">$240.000</span></div>
+        </div>
+        <div class="vrate"><span class="vrl" data-t="Tarifa/noche desde|From per night"></span><span class="vrv">$110</span></div>
+        <button class="vbtn inv" onclick="openModal('bullet')" data-t="Análisis de inversión →|Investment analysis →"></button>
+        <button class="vbtn gst" style="display:none" onclick="openModal('book')" data-t="Consultar disponibilidad →|Check availability →"></button>
+      </div>
+    </div>
+    <!-- TIPO 2H Std -->
+    <div class="vc">
+      <div class="vi"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392679/Boho_ry69bl.png" alt="Tipo 2H"><div class="vib" data-t="5 unidades|5 units"></div></div>
+      <div class="vbody">
+        <div class="vtype" data-t="Tipo 2 Habitaciones · Estándar · 120 m²|2 Bedrooms · Standard · 120 m²"></div>
+        <div class="vname">WÁ <em>Atlantic</em></div>
+        <div class="vm2">120 m² · 14 m² terraza</div>
+        <div class="vsps">
+          <div class="vsp"><span class="vk" data-t="Hab. / Baños|Bed / Bath"></span><span class="vv">2 / 2</span></div>
+          <div class="vsp"><span class="vk" data-t="Capacidad|Capacity"></span><span class="vv">4 <span data-t="personas|guests"></span></span></div>
+          <div class="vsp inv"><span class="vk" data-t="Ingreso bruto/año|Gross income/year"></span><span class="vv t">$209.967</span></div>
+          <div class="vsp inv"><span class="vk" data-t="Precio de venta|Sale price"></span><span class="vv t">$295.000</span></div>
+        </div>
+        <div class="vrate"><span class="vrl" data-t="Tarifa/noche desde|From per night"></span><span class="vrv">$145</span></div>
+        <button class="vbtn inv" onclick="openModal('bullet')" data-t="Análisis de inversión →|Investment analysis →"></button>
+        <button class="vbtn gst" style="display:none" onclick="openModal('book')" data-t="Consultar disponibilidad →|Check availability →"></button>
+      </div>
+    </div>
+    <!-- TIPO 2H Premium -->
+    <div class="vc">
+      <div class="vi"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777457639/WhatsApp_Image_2026-04-29_at_11.35.57_ejesgp.jpg" alt="Tipo 2H Prem"><div class="vib ro" data-t="4 unidades · Rooftop|4 units · Rooftop"></div></div>
+      <div class="vbody">
+        <div class="vtype" data-t="Tipo 2 Habitaciones · Premium + Rooftop|2 Bedrooms · Premium + Rooftop"></div>
+        <div class="vname">WÁ <em>Horizon</em></div>
+        <div class="vm2">120 m² + ~30 m² Rooftop</div>
+        <div class="vsps">
+          <div class="vsp"><span class="vk" data-t="Hab. / Baños|Bed / Bath"></span><span class="vv">2 / 2</span></div>
+          <div class="vsp"><span class="vk" data-t="Capacidad|Capacity"></span><span class="vv">4 <span data-t="personas|guests"></span></span></div>
+          <div class="vsp inv"><span class="vk" data-t="Ingreso bruto/año|Gross income/year"></span><span class="vv t">$204.035</span></div>
+          <div class="vsp inv"><span class="vk" data-t="Precio de venta|Sale price"></span><span class="vv t">$345.000</span></div>
+        </div>
+        <div class="vrate"><span class="vrl" data-t="Tarifa/noche desde|From per night"></span><span class="vrv">$175</span></div>
+        <button class="vbtn inv" onclick="openModal('bullet')" data-t="Análisis de inversión →|Investment analysis →"></button>
+        <button class="vbtn gst" style="display:none" onclick="openModal('book')" data-t="Consultar disponibilidad →|Check availability →"></button>
+      </div>
+    </div>
+    <!-- TIPO 3H Premium -->
+    <div class="vc">
+      <div class="vi"><img src="https://res.cloudinary.com/dbc8nfyer/image/upload/v1777392679/Tropical_bdqyp7.png" alt="Tipo 3H"><div class="vib ro" data-t="3 unidades · Rooftop|3 units · Rooftop"></div></div>
+      <div class="vbody">
+        <div class="vtype" data-t="Tipo 3 Habitaciones · Premium + Rooftop Lounge|3 Bedrooms · Premium + Rooftop Lounge"></div>
+        <div class="vname">WÁ <em>Reserve</em></div>
+        <div class="vm2">172 m² + ~40 m² Rooftop Lounge</div>
+        <div class="vsps">
+          <div class="vsp"><span class="vk" data-t="Hab. / Baños|Bed / Bath"></span><span class="vv">3 / 3</span></div>
+          <div class="vsp"><span class="vk" data-t="Capacidad|Capacity"></span><span class="vv">6 <span data-t="personas|guests"></span></span></div>
+          <div class="vsp inv"><span class="vk" data-t="Ingreso bruto/año|Gross income/year"></span><span class="vv t">$196.443</span></div>
+          <div class="vsp inv"><span class="vk" data-t="Precio de venta|Sale price"></span><span class="vv t">$475.000</span></div>
+        </div>
+        <div class="vrate"><span class="vrl" data-t="Tarifa/noche desde|From per night"></span><span class="vrv">$225</span></div>
+        <button class="vbtn inv" onclick="openModal('bullet')" data-t="Análisis de inversión →|Investment analysis →"></button>
+        <button class="vbtn gst" style="display:none" onclick="openModal('book')" data-t="Consultar disponibilidad →|Check availability →"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING SIMULATION (guest) -->
+  <div class="gst bsim" style="display:none">
+    <div class="bsim-h" data-t="Simulación de reserva · WÁ Cabarete|Booking simulation · WÁ Cabarete"></div>
+    <div class="brow">
+      <div class="bf">
+        <label data-t="Villa|Villa"></label>
+        <select id="bvilla">
+          <option data-t="WÁ Amber — 1 hab. (desde $110/noche)|WÁ Amber — 1 bed (from $110/night)"></option>
+          <option data-t="WÁ Atlantic — 2 hab. (desde $145/noche)|WÁ Atlantic — 2 bed (from $145/night)"></option>
+          <option data-t="WÁ Horizon — 2 hab. Rooftop (desde $175/noche)|WÁ Horizon — 2 bed Rooftop (from $175/night)"></option>
+          <option data-t="WÁ Reserve — 3 hab. Rooftop (desde $225/noche)|WÁ Reserve — 3 bed Rooftop (from $225/night)"></option>
+        </select>
+      </div>
+      <div class="bf"><label data-t="Llegada|Check-in"></label><input type="date" id="bcin"></div>
+      <div class="bf"><label data-t="Salida|Check-out"></label><input type="date" id="bcout"></div>
+      <button class="bsearch" onclick="searchBook()" data-t="Buscar →|Search →"></button>
+    </div>
+    <div class="bres" id="bres" style="display:none">
+      <div class="brc"><div class="brc-s" data-t="Disponible|Available"></div><div class="brc-t" id="br-vname">WÁ Amber</div><div class="brc-p" id="br-price">$110 <span class="brc-pn" data-t="/noche|/night"></span></div><div class="brc-p" id="br-total" style="font-size:.85rem;color:var(--mu);margin-top:.3rem"></div><button class="brc-btn" data-t="Reservar vía Airbnb|Book via Airbnb"></button></div>
+      <div class="brc"><div class="brc-s" data-t="Disponible|Available"></div><div class="brc-t" id="br-v2">WÁ Amber</div><div class="brc-p" id="br-p2">$110 <span class="brc-pn" data-t="/noche|/night"></span></div><button class="brc-btn" data-t="Reservar vía Booking|Book via Booking"></button></div>
+      <div class="brc"><div class="brc-s" data-t="Disponible|Available"></div><div class="brc-t" id="br-v3">WÁ Amber</div><div class="brc-p" id="br-p3">$110 <span class="brc-pn" data-t="/noche|/night"></span></div><button class="brc-btn" data-t="Contacto directo|Direct contact"></button></div>
+    </div>
+    <div class="bnotice" data-t="Simulación para inversores · Los precios y disponibilidades son ilustrativos · El complejo está en fase de desarrollo|Simulation for investors · Prices and availability are illustrative · The complex is under development"></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="sec rv" id="contact">
+  <div class="ey am"><span data-t="06 — Contacto|06 — Contact"></span></div>
+  <h2 class="st2" data-t="Hablemos sobre<br><em>WÁ Cabarete</em>|Let's talk about<br><em>WÁ Cabarete</em>"></h2>
+  <div class="cgrid">
+    <div>
+      <div class="cform">
+        <div class="cf"><label data-t="Nombre completo|Full name"></label><input type="text" placeholder="Ana García"></div>
+        <div class="cf"><label>Email</label><input type="email" placeholder="ana@example.com"></div>
+        <div class="cf"><label data-t="Teléfono / WhatsApp|Phone / WhatsApp"></label><input type="tel" placeholder="+34 600 000 000"></div>
+        <div class="cf inv">
+          <label data-t="Perfil de inversión|Investment profile"></label>
+          <select>
+            <option data-t="Bullet Loan — Inversor constructor|Bullet Loan — Construction investor"></option>
+            <option data-t="Adquisición completa — Early Bird ($4.5M)|Full acquisition — Early Bird ($4.5M)"></option>
+            <option data-t="Adquisición completa — Precio regular ($5M)|Full acquisition — Regular price ($5M)"></option>
+            <option data-t="Solo información|Information only"></option>
+          </select>
+        </div>
+        <div class="cf inv">
+          <label data-t="Ticket de inversión (bullet loan)|Investment ticket (bullet loan)"></label>
+          <select>
+            <option data-t="$100.000 – $250.000|$100,000 – $250,000"></option>
+            <option data-t="$250.000 – $500.000|$250,000 – $500,000"></option>
+            <option data-t="$500.000 – $1.000.000|$500,000 – $1,000,000"></option>
+            <option data-t="$1.000.000 – $2.525.000|$1,000,000 – $2,525,000"></option>
+            <option data-t="Adquisición completa|Full acquisition"></option>
+          </select>
+        </div>
+        <div class="cf gst" style="display:none">
+          <label data-t="Tipo de villa de interés|Villa type of interest"></label>
+          <select>
+            <option>WÁ Amber — 1 bed</option>
+            <option>WÁ Atlantic — 2 bed</option>
+            <option>WÁ Horizon — 2 bed Rooftop</option>
+            <option>WÁ Reserve — 3 bed Rooftop</option>
+          </select>
+        </div>
+        <div class="cf"><label data-t="Mensaje|Message"></label><textarea placeholder="" data-t-ph="¿Cuéntanos más sobre tu interés en WÁ Cabarete...|Tell us more about your interest in WÁ Cabarete..."></textarea></div>
+        <button class="csend" data-t="Enviar solicitud|Send request"></button>
+      </div>
+    </div>
+    <div class="cinfo">
+      <div class="cib"><div class="cilbl" data-t="Promotor|Developer"></div><div class="cival">Corporación AKLK, S.R.L.</div><div class="cisub">RNC 1-33-06909-1 · Santo Domingo, RD</div></div>
+      <div class="cib"><div class="cilbl" data-t="Gestión del proyecto|Project management"></div><div class="cival">Caribbean Collection Real Estate</div><div class="cisub">Marina de Rojas Investments S.R.L. · RNC 132384199</div></div>
+      <div class="cib"><div class="cilbl" data-t="Ubicación del proyecto|Project location"></div><div class="cival">Sosúa · Costa Norte</div><div class="cisub" data-t="República Dominicana · Costa del Ámbar|Dominican Republic · Amber Coast"></div></div>
+      <div class="cib"><div class="cilbl" data-t="Feria Banreservas Madrid 2026|Banreservas Madrid Fair 2026"></div><div class="cival" data-t="22–24 de Mayo, 2026|May 22–24, 2026"></div><div class="cisub">Hotel Meliá Castilla, Madrid</div></div>
+      <div style="margin-top:1.25rem;padding:1.25rem;background:var(--tm);border:1px solid var(--tb)">
+        <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--t);margin-bottom:.7rem" data-t="Documento confidencial|Confidential document"></div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--mu);line-height:1.7" data-t="Este material está dirigido exclusivamente a inversores cualificados. Las proyecciones financieras se basan en estimaciones de mercado y no constituyen garantía de resultados. Se recomienda asesoría fiscal y legal local.|This material is directed exclusively to qualified investors. Financial projections are based on market estimates and do not constitute a guarantee of results. Local tax and legal advice is recommended."></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<div class="ctaf">
+  <div class="ctaf-wbg">WÁ</div>
+  <div class="ctaf-c">
+    <div class="ctaf-h">Born from<br>Wild <em>Ámbar</em></div>
+    <div class="ctaf-d" data-t="Crafted for Atlantic living. WÁ Cabarete — 15 villas boutique en la Costa del Ámbar. Una oportunidad de inversión diseñada para durar décadas.|Crafted for Atlantic living. WÁ Cabarete — 15 boutique villas on the Amber Coast. An investment opportunity designed to last decades."></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="bi" onclick="setAud(0);scrollTo('#invest')" data-t="Invertir en WÁ Cabarete|Invest in WÁ Cabarete"></button>
+      <button class="bs" onclick="scrollTo('#contact')" data-t="Solicitar dossier completo|Request full dossier"></button>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(253,250,244,.2);margin-top:2.5rem" data-t="WÁ Cabarete · Documento confidencial · Mayo 2026|WÁ Cabarete · Confidential document · May 2026"></div>
+  </div>
+</div>
+<div class="br"></div>
+<footer>
+  <div class="flogo">W<em>Á</em> <span style="font-family:'Jost',sans-serif;font-weight:300;font-size:.8rem;color:var(--mu);letter-spacing:.04em">Cabarete</span></div>
+  <div class="fcopy">
+    © 2026 Caribbean Collection Real Estate<br>
+    <span data-t="Documento confidencial · No distribuir sin autorización|Confidential document · Do not distribute without authorization"></span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="mbg" id="modal">
+  <div class="modal">
+    <button class="mc-close" onclick="closeModal()">✕ <span data-t="Cerrar|Close"></span></button>
+    <div id="mcont"></div>
+    <div class="cform" style="margin-top:1.1rem">
+      <div class="cf"><label data-t="Nombre completo|Full name"></label><input type="text" id="mn"></div>
+      <div class="cf"><label>Email</label><input type="email" id="me"></div>
+      <div class="cf"><label data-t="Teléfono / WhatsApp|Phone / WhatsApp"></label><input type="tel" id="mt"></div>
+      <div class="cf" id="mticket"><label data-t="Ticket / Interés|Ticket / Interest"></label>
+        <select id="msel">
+          <option data-t="$100K – $250K · Bullet Loan|$100K – $250K · Bullet Loan"></option>
+          <option data-t="$250K – $500K · Bullet Loan|$250K – $500K · Bullet Loan"></option>
+          <option data-t="$500K – $1M · Bullet Loan|$500K – $1M · Bullet Loan"></option>
+          <option data-t="$1M – $2.525M · Bullet Loan|$1M – $2.525M · Bullet Loan"></option>
+          <option data-t="Early Bird $4.5M · Adquisición|Early Bird $4.5M · Acquisition"></option>
+          <option data-t="$5M · Adquisición regular|$5M · Regular acquisition"></option>
+        </select>
+      </div>
+      <button class="csend" onclick="submitModal()" data-t="Enviar solicitud|Send request"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────
+let lang='es', aud=0; // 0=investor, 1=guest
+
+// ── TRANSLATIONS ──────────────────────────────
+function applyLang(){
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const parts=el.getAttribute('data-t').split('|');
+    const txt=parts[lang==='es'?0:1]||parts[0];
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=txt;
+    else if(el.tagName==='OPTION') el.textContent=txt;
+    else el.innerHTML=txt;
+  });
+  document.querySelectorAll('[data-t-ph]').forEach(el=>{
+    const p=el.getAttribute('data-t-ph').split('|');
+    el.placeholder=p[lang==='es'?0:1]||p[0];
+  });
+  // nav buttons
+  document.getElementById('btn-inv').textContent=lang==='es'?'Inversor':'Investor';
+  document.getElementById('btn-gst').textContent=lang==='es'?'Huésped':'Guest';
+  document.documentElement.lang=lang;
+}
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tbtn')[l==='es'?0:1].classList.add('on');
+  applyLang();
+}
+
+// ── AUDIENCE ──────────────────────────────────
+function setAud(a){
+  aud=a;
+  document.querySelectorAll('.abtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.abtn')[a].classList.add('on');
+  const bd=document.getElementById('bd');
+  if(a===1){
+    bd.classList.add('gm');
+    document.querySelectorAll('.gst').forEach(e=>e.style.display='block');
+    document.querySelectorAll('.inv').forEach(e=>e.style.display='none');
+  } else {
+    bd.classList.remove('gm');
+    document.querySelectorAll('.inv').forEach(e=>e.style.display='block');
+    document.querySelectorAll('.gst').forEach(e=>e.style.display='none');
+  }
+  // reapply after audience switch
+  applyLang();
+}
+
+// ── SCROLL ────────────────────────────────────
+function scrollTo(id){const el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+
+// ── NAV SCROLL ────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('sc',window.scrollY>60);
+});
+
+// ── CALCULATOR ────────────────────────────────
+function calcR(){
+  const v=+document.getElementById('slider').value;
+  const cap=v*1000;
+  const int=cap*0.18*2;
+  const tot=cap+int;
+  const pct=(cap/2525000*100).toFixed(1);
+  const fmt=n=>'$'+n.toLocaleString('es-ES');
+  document.getElementById('c-cap').textContent=fmt(cap);
+  document.getElementById('c-int').textContent='+'+fmt(int);
+  document.getElementById('c-tot').textContent=fmt(tot);
+  document.getElementById('c-pct').textContent=pct+'%';
+}
+calcR();
+
+// ── BOOKING SIMULATION ────────────────────────
+const vNames=['WÁ Amber','WÁ Atlantic','WÁ Horizon','WÁ Reserve'];
+const vRates=[110,145,175,225];
+function searchBook(){
+  const vi=document.getElementById('bvilla').selectedIndex;
+  const cin=document.getElementById('bcin').value;
+  const cout=document.getElementById('bcout').value;
+  const r=document.getElementById('bres');
+  const nm=vNames[vi];
+  const rate=vRates[vi];
+  let nights=1;
+  if(cin&&cout){const d=(new Date(cout)-new Date(cin))/86400000;if(d>0)nights=d;}
+  const tot=rate*nights;
+  const ns=lang==='es'?'noches':'nights';
+  const nn=lang==='es'?'noche':'night';
+  document.getElementById('br-vname').textContent=nm;
+  document.getElementById('br-v2').textContent=nm;
+  document.getElementById('br-v3').textContent=nm;
+  const lbl=lang==='es'?'/noche|/night'.split('|')[0]:'/noche|/night'.split('|')[1];
+  document.getElementById('br-price').innerHTML=`$${rate} <span style="font-size:.8em;color:var(--mu)">/${nn}</span>`;
+  document.getElementById('br-p2').innerHTML=`$${rate} <span style="font-size:.8em;color:var(--mu)">/${nn}</span>`;
+  document.getElementById('br-p3').innerHTML=`$${rate} <span style="font-size:.8em;color:var(--mu)">/${nn}</span>`;
+  document.getElementById('br-total').textContent=nights>1?`$${tot.toLocaleString('es-ES')} · ${nights} ${ns}`:'';
+  r.style.display='grid';
+  applyLang();
+}
+// Set default dates
+const today=new Date();
+const tomorrow=new Date(today);tomorrow.setDate(tomorrow.getDate()+7);
+const next=new Date(tomorrow);next.setDate(next.getDate()+7);
+const df=d=>d.toISOString().split('T')[0];
+document.getElementById('bcin').value=df(tomorrow);
+document.getElementById('bcout').value=df(next);
+
+// ── MODAL ─────────────────────────────────────
+function openModal(type){
+  const m=document.getElementById('modal');
+  const c=document.getElementById('mcont');
+  if(type==='bullet'){
+    c.innerHTML=`<div class="pill t" style="margin-bottom:.9rem">${lang==='es'?'Bullet Loan':'Bullet Loan'}</div><div class="mh">${lang==='es'?'Inversor constructor':'Construction investor'}</div><div class="msub">${lang==='es'?'18% TIR · Plazo máx. 24 meses · 1ª hipoteca sobre terreno':'18% IRR · Max 24 months · 1st mortgage on land'}</div>`;
+  } else if(type==='acquisition'){
+    c.innerHTML=`<div class="pill a" style="margin-bottom:.9rem">${lang==='es'?'Adquisición completa':'Full acquisition'}</div><div class="mh">${lang==='es'?'Early Bird $4.5M':'Early Bird $4.5M'}</div><div class="msub">${lang==='es'?'Precio regular $5.0M · Descuento $500K':'Regular price $5.0M · Discount $500K'}</div>`;
+  } else {
+    c.innerHTML=`<div class="pill a" style="margin-bottom:.9rem">${lang==='es'?'Reserva de villa':'Villa booking'}</div><div class="mh">${lang==='es'?'Consulta de disponibilidad':'Availability inquiry'}</div><div class="msub">${lang==='es'?'WÁ Cabarete · Costa del Ámbar':'WÁ Cabarete · Amber Coast'}</div>`;
+  }
+  m.classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function submitModal(){
+  const c=document.getElementById('mcont');
+  c.innerHTML=`<div style="text-align:center;padding:1.5rem 0"><div style="font-size:2rem;margin-bottom:.75rem">✓</div><div class="mh">${lang==='es'?'Solicitud enviada':'Request sent'}</div><div class="msub">${lang==='es'?'Nos pondremos en contacto en menos de 24h.':'We will get back to you within 24 hours.'}</div></div>`;
+  document.getElementById('mticket').style.display='none';
+  setTimeout(closeModal,3000);
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal()});
+
+// ── REVEAL ON SCROLL ──────────────────────────
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}}),{threshold:.06});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// ── INIT ──────────────────────────────────────
+applyLang();
+setAud(0);
+</script>
+</body>
+</html>
